@@ -1,0 +1,34 @@
+{
+  "name": "uralsjs-spa-app",
+  "version": "0.0.1",
+  "description": "UralsJs Single page application",
+  "main": "js/src/index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build-dev": "tsc && browserify -r ./js/test/index.js:run > resources/bundle.js"
+  },
+  "keywords": [
+    "framework",
+    "frontend",
+    "spa",
+    "uralsjs",
+    "html"
+  ],
+  "author": "Anatoly Starodubtsev <tostar74@mail.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.11.18",
+    "browserify": "^17.0.0",
+    "uglify-js": "^3.17.4",
+    "common-shakeify": "^1.1.2"
+  },
+  "dependencies": {
+    "uralsjs-app-abstractions": "0.0.1",
+    "uralsjs-id-html-tools": "0.0.1",
+    "uralsjs-map-record": "0.0.1",
+    "uralsjs-reactive-storage": "0.0.1"
+  }
+}
