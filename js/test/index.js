@@ -29,6 +29,7 @@ var afterRender = {
                     }]));
                 state.res.triggerReactiveFunc();
                 formElState.reinit([{ header: "" }]);
+                console.log(deps.getHello());
             }
         };
     },
@@ -37,5 +38,7 @@ var afterRender = {
     el: sets_1.elModelSet,
     res: sets_1.resModelSet,
     formEl: sets_1.formElModelSet,
-}, afterRender, null);
+}, afterRender, {
+    getHello: function () { return "H-e-ll-o!"; }
+});
 console.log('Runed!');

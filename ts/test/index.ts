@@ -3,6 +3,7 @@ import { El } from "./el-model";
 import { FormEl } from "./form-el-model";
 import { elModelSet, formElModelSet, resModelSet } from "./sets";
 import { spaApp } from "../src";
+import { FormElDep } from "./form-el-widget";
 
 type State = Record<string, ReactiveStorage<unknown, unknown>>;
 
@@ -21,7 +22,7 @@ const afterRender = {
         }
     },
     res: (htmlEl: HTMLElement, state: State, id: number|string, deps) => {},
-    formEl: (htmlEl: HTMLElement, state: State, id: null, deps) => {
+    formEl: (htmlEl: HTMLElement, state: State, id: null, deps: FormElDep) => {
         const elState = state.el as ReactiveStorage<El, number>;
         const formElState = state.formEl as ReactiveStorage<FormEl, number>;
         htmlEl.onkeyup = (ev) => {
@@ -35,6 +36,7 @@ const afterRender = {
                 }]))
                 state.res.triggerReactiveFunc();
                 formElState.reinit([{header: ""}]);
+                console.log(deps.getHello());
             }
         }
     },
@@ -44,5 +46,7 @@ spaApp({
     el: elModelSet,
     res: resModelSet,
     formEl: formElModelSet,
-}, afterRender, null);
+}, afterRender, {
+    getHello: () => "H-e-ll-o!"
+});
 console.log('Runed!');

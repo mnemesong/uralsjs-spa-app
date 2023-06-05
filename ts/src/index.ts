@@ -32,8 +32,7 @@ export const spaApp = <Keys extends string, Id, Deps>(
     modelSets: Record<Keys, ModelSet<unknown, unknown, Deps>>,
     afterRender: Record<
         Keys, 
-        AfterRenderFunc<Record<Keys, ReactiveStorage<unknown, unknown>>, 
-        Deps>
+        AfterRenderFunc<Record<Keys, ReactiveStorage<unknown, unknown>>, Deps>
     >,
     deps: Deps
 ) : void => {
@@ -54,7 +53,7 @@ export const spaApp = <Keys extends string, Id, Deps>(
                 .forEach((cn: HTMLElement) => {
                     try{
                         const id = modelSets[i].idTool.parseId(cn.id);
-                        afterRender[i](cn, state, id);
+                        afterRender[i](cn, state, id, deps);
                     } catch (e) {
                         console.log(e);
                         console.log(cn);

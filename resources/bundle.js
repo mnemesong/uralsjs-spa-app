@@ -29,7 +29,7 @@ var spaApp = function (modelSets, afterRender, deps) {
                 .forEach(function (cn) {
                 try {
                     var id = modelSets[i].idTool.parseId(cn.id);
-                    afterRender[i](cn, state, id);
+                    afterRender[i](cn, state, id, deps);
                 }
                 catch (e) {
                     console.log(e);
@@ -56,7 +56,7 @@ exports.elWidgetFactory = elWidgetFactory;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.formElWidget = void 0;
-var formElWidget = function (m, id, d) { return "\n<div id=\"".concat(id, "\"><h4>Form</h4><input type='text' value='").concat(m.header, "'></div>"); };
+var formElWidget = function (m, id, d) { return "\n<div id=\"".concat(id, "\" data-hello=\"").concat(d.getHello(), "\"><h4>Form</h4><input type='text' value='").concat(m.header, "'></div>"); };
 exports.formElWidget = formElWidget;
 
 },{}],4:[function(require,module,exports){
@@ -375,6 +375,7 @@ var afterRender = {
                     }]));
                 state.res.triggerReactiveFunc();
                 formElState.reinit([{ header: "" }]);
+                console.log(deps.getHello());
             }
         };
     },
@@ -383,7 +384,9 @@ var afterRender = {
     el: sets_1.elModelSet,
     res: sets_1.resModelSet,
     formEl: sets_1.formElModelSet,
-}, afterRender, null);
+}, afterRender, {
+    getHello: function () { return "H-e-ll-o!"; }
+});
 console.log('Runed!');
 
 },{"../src":1,"./sets":5}]},{},[]);

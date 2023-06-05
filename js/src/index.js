@@ -28,7 +28,7 @@ var spaApp = function (modelSets, afterRender, deps) {
                 .forEach(function (cn) {
                 try {
                     var id = modelSets[i].idTool.parseId(cn.id);
-                    afterRender[i](cn, state, id);
+                    afterRender[i](cn, state, id, deps);
                 }
                 catch (e) {
                     console.log(e);
