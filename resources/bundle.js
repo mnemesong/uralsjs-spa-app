@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.spaApp = void 0;
 var uralsjs_app_abstractions_1 = require("uralsjs-app-abstractions");
 var uralsjs_map_record_1 = require("uralsjs-map-record");
-var browserRendererAndGetSelectors = function (getElements, getRootSelector, elWidget, renderId) {
+var browserRendererAndGetSelectors = function (getElements, getRootSelector, elWidget, renderId, deps) {
     var renderEl = function (el) {
-        return elWidget(el.model, renderId(el.id));
+        return elWidget(el.model, renderId(el.id), deps);
     };
     var grouped = (0, uralsjs_app_abstractions_1.regroup)(getElements(), getRootSelector);
     var groupedWidgets = Object.keys(grouped)
@@ -17,10 +17,10 @@ var browserRendererAndGetSelectors = function (getElements, getRootSelector, elW
     });
     return grouped;
 };
-var spaApp = function (modelSets, afterRender) {
+var spaApp = function (modelSets, afterRender, deps) {
     var state = (0, uralsjs_map_record_1.mapRecordVals)(modelSets, function (el) { return el.stor; });
     Object.keys(state).forEach(function (i) { return state[i].setReactiveFunc(function (recs) {
-        var grouped = browserRendererAndGetSelectors(function () { return recs; }, modelSets[i].rootSelector, modelSets[i].widget, function (id) { return modelSets[i].idTool.renderId(id); });
+        var grouped = browserRendererAndGetSelectors(function () { return recs; }, modelSets[i].rootSelector, modelSets[i].widget, function (id) { return modelSets[i].idTool.renderId(id); }, deps);
         Object.keys(grouped).forEach(function (s) {
             Array.from(document
                 .querySelector(s)
@@ -38,7 +38,7 @@ var spaApp = function (modelSets, afterRender) {
             });
         });
     }); });
-    Object.keys(state).forEach(function (i) { return state[i].reinit(modelSets[i].initData); });
+    Object.keys(state).forEach(function (i) { return state[i].reinit(modelSets[i].initData(deps)); });
 };
 exports.spaApp = spaApp;
 
@@ -47,7 +47,7 @@ exports.spaApp = spaApp;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.elWidgetFactory = void 0;
 var elWidgetFactory = function (wClass) { return ({
-    widget: function (m, id) { return "\n<li id=\"".concat(id, "\" style=\"font-weight: ").concat(m.isActive ? "bold" : "normal", ";\">\n    ").concat(m.header, "<ol></ol>\n</li>"); },
+    widget: function (m, id, d) { return "\n<li id=\"".concat(id, "\" style=\"font-weight: ").concat(m.isActive ? "bold" : "normal", ";\">\n    ").concat(m.header, "<ol></ol>\n</li>"); },
     css: "\nli: {font-weight: 700;}"
 }); };
 exports.elWidgetFactory = elWidgetFactory;
@@ -56,7 +56,7 @@ exports.elWidgetFactory = elWidgetFactory;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.formElWidget = void 0;
-var formElWidget = function (m, id) { return "\n<div id=\"".concat(id, "\"><h4>Form</h4><input type='text' value='").concat(m.header, "'></div>"); };
+var formElWidget = function (m, id, d) { return "\n<div id=\"".concat(id, "\"><h4>Form</h4><input type='text' value='").concat(m.header, "'></div>"); };
 exports.formElWidget = formElWidget;
 
 },{}],4:[function(require,module,exports){
@@ -64,7 +64,7 @@ exports.formElWidget = formElWidget;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resWidgetFactory = void 0;
 var resWidgetFactory = function (wClass) { return ({
-    widget: function (m, id) { return "\n<li id=\"".concat(id, "\" class='").concat(wClass, "-li'>").concat(m.name, "</li>"); },
+    widget: function (m, id, d) { return "\n<li id=\"".concat(id, "\" class='").concat(wClass, "-li'>").concat(m.name, "</li>"); },
     css: "\n.".concat(wClass, "-li {font-color: #777;}"),
 }); };
 exports.resWidgetFactory = resWidgetFactory;
@@ -82,30 +82,30 @@ exports.elModelSet = {
     widget: (0, el_widget_1.elWidgetFactory)("els").widget,
     idTool: new uralsjs_id_html_tools_1.NumPrefixIdTool("el_"),
     rootSelector: function (el) { return 'ol'; },
-    initData: [
+    initData: function () { return [
         { header: "el1", isActive: true },
         { header: "el2", isActive: false }
-    ],
+    ]; },
     stor: new uralsjs_reactive_storage_1.IncrNumReactiveStorage(),
 };
 exports.resModelSet = {
     widget: (0, res_widget_1.resWidgetFactory)("res").widget,
     idTool: new uralsjs_id_html_tools_1.NumPrefixIdTool("res_"),
     rootSelector: function (el) { return '#el_' + el.model.elId + " > ol"; },
-    initData: [
+    initData: function () { return [
         { name: "Петров", elId: 0 },
         { name: "Сидоров", elId: 0 },
         { name: "Макарченко", elId: 1 },
-    ],
+    ]; },
     stor: new uralsjs_reactive_storage_1.IncrNumReactiveStorage(),
 };
 exports.formElModelSet = {
     widget: form_el_widget_1.formElWidget,
     idTool: new uralsjs_id_html_tools_1.NullDefaultIdTool('elForm'),
     rootSelector: function (el) { return '#formContainer'; },
-    initData: [
+    initData: function () { return [
         { header: "" }
-    ],
+    ]; },
     stor: new uralsjs_reactive_storage_1.SoloDefReactiveStorage({ header: '' }),
 };
 
@@ -349,7 +349,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sets_1 = require("./sets");
 var src_1 = require("../src");
 var afterRender = {
-    el: function (htmlEl, state, id) {
+    el: function (htmlEl, state, id, deps) {
         htmlEl.onclick = function () {
             state.el.reinit(state.el.readAll().map(function (r) { return (r.id === id)
                 ? {
@@ -360,8 +360,8 @@ var afterRender = {
             state.res.triggerReactiveFunc();
         };
     },
-    res: function (htmlEl, state, id) { },
-    formEl: function (htmlEl, state, id) {
+    res: function (htmlEl, state, id, deps) { },
+    formEl: function (htmlEl, state, id, deps) {
         var elState = state.el;
         var formElState = state.formEl;
         htmlEl.onkeyup = function (ev) {
@@ -383,7 +383,7 @@ var afterRender = {
     el: sets_1.elModelSet,
     res: sets_1.resModelSet,
     formEl: sets_1.formElModelSet,
-}, afterRender);
+}, afterRender, null);
 console.log('Runed!');
 
 },{"../src":1,"./sets":5}]},{},[]);

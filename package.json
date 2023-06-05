@@ -1,6 +1,6 @@
 {
   "name": "uralsjs-spa-app",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "UralsJs Single page application",
   "main": "js/src/index.js",
   "scripts": {
@@ -26,9 +26,9 @@
     "common-shakeify": "^1.1.2"
   },
   "dependencies": {
-    "uralsjs-app-abstractions": "0.0.1",
-    "uralsjs-id-html-tools": "0.0.1",
-    "uralsjs-map-record": "0.0.1",
-    "uralsjs-reactive-storage": "0.0.1"
+    "uralsjs-app-abstractions": "^0.1.1",
+    "uralsjs-id-html-tools": "^0.0.1",
+    "uralsjs-map-record": "^0.0.1",
+    "uralsjs-reactive-storage": "^0.0.1"
   }
 }

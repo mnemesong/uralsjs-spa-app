@@ -2,14 +2,15 @@ import { ReactiveStorage, Rec } from "uralsjs-reactive-storage";
 import { Widget, regroup, ModelSet } from "uralsjs-app-abstractions";
 import { mapRecordVals } from "uralsjs-map-record";
 
-const browserRendererAndGetSelectors = <M, Id>(
+const browserRendererAndGetSelectors = <M, Id, Deps>(
     getElements: () => Rec<M, Id>[],
     getRootSelector: (el: Rec<M, Id>) => string,
-    elWidget: Widget<M>,
-    renderId: (id: Id) => string
+    elWidget: Widget<M, Deps>,
+    renderId: (id: Id) => string,
+    deps: Deps
 ): Record<string, Rec<M, Id>[]> => {
     const renderEl = (el: Rec<M, Id>): string =>
-        elWidget(el.model, renderId(el.id));
+        elWidget(el.model, renderId(el.id), deps);
     const grouped = regroup(getElements(), getRootSelector);
     const groupedWidgets: {sel: string, arr: string[]}[] = Object.keys(grouped)
         .map(k => ({sel: k, arr: grouped[k].map(el => renderEl(el))}));
@@ -20,15 +21,21 @@ const browserRendererAndGetSelectors = <M, Id>(
     return grouped;
 }
 
-export type AfterRenderFunc<State> = (
+export type AfterRenderFunc<State, Deps> = (
     htmlEl: HTMLElement,
     state: State,
-    id: string|number
+    id: string|number,
+    deps: Deps
 ) => void;
 
-export const spaApp = <Keys extends string, Id>(
-    modelSets: Record<Keys, ModelSet<unknown, unknown>>,
-    afterRender: Record<Keys, AfterRenderFunc<Record<Keys, ReactiveStorage<unknown, unknown>>>>
+export const spaApp = <Keys extends string, Id, Deps>(
+    modelSets: Record<Keys, ModelSet<unknown, unknown, Deps>>,
+    afterRender: Record<
+        Keys, 
+        AfterRenderFunc<Record<Keys, ReactiveStorage<unknown, unknown>>, 
+        Deps>
+    >,
+    deps: Deps
 ) : void => {
     const state = mapRecordVals(modelSets, (el) => el.stor);
     Object.keys(state).forEach((i) => state[i].setReactiveFunc((recs) => {
@@ -37,6 +44,7 @@ export const spaApp = <Keys extends string, Id>(
             modelSets[i].rootSelector,
             modelSets[i].widget,
             (id) => modelSets[i].idTool.renderId(id),
+            deps
         );
         Object.keys(grouped).forEach(s => {
             Array.from(document
@@ -54,5 +62,5 @@ export const spaApp = <Keys extends string, Id>(
                 });
         });
     }));
-    Object.keys(state).forEach((i) => state[i].reinit(modelSets[i].initData));
+    Object.keys(state).forEach((i) => state[i].reinit(modelSets[i].initData(deps)));
 }

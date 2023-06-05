@@ -10,29 +10,29 @@ exports.elModelSet = {
     widget: (0, el_widget_1.elWidgetFactory)("els").widget,
     idTool: new uralsjs_id_html_tools_1.NumPrefixIdTool("el_"),
     rootSelector: function (el) { return 'ol'; },
-    initData: [
+    initData: function () { return [
         { header: "el1", isActive: true },
         { header: "el2", isActive: false }
-    ],
+    ]; },
     stor: new uralsjs_reactive_storage_1.IncrNumReactiveStorage(),
 };
 exports.resModelSet = {
     widget: (0, res_widget_1.resWidgetFactory)("res").widget,
     idTool: new uralsjs_id_html_tools_1.NumPrefixIdTool("res_"),
     rootSelector: function (el) { return '#el_' + el.model.elId + " > ol"; },
-    initData: [
+    initData: function () { return [
         { name: "Петров", elId: 0 },
         { name: "Сидоров", elId: 0 },
         { name: "Макарченко", elId: 1 },
-    ],
+    ]; },
     stor: new uralsjs_reactive_storage_1.IncrNumReactiveStorage(),
 };
 exports.formElModelSet = {
     widget: form_el_widget_1.formElWidget,
     idTool: new uralsjs_id_html_tools_1.NullDefaultIdTool('elForm'),
     rootSelector: function (el) { return '#formContainer'; },
-    initData: [
+    initData: function () { return [
         { header: "" }
-    ],
+    ]; },
     stor: new uralsjs_reactive_storage_1.SoloDefReactiveStorage({ header: '' }),
 };

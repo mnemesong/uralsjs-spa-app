@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sets_1 = require("./sets");
 var src_1 = require("../src");
 var afterRender = {
-    el: function (htmlEl, state, id) {
+    el: function (htmlEl, state, id, deps) {
         htmlEl.onclick = function () {
             state.el.reinit(state.el.readAll().map(function (r) { return (r.id === id)
                 ? {
@@ -14,8 +14,8 @@ var afterRender = {
             state.res.triggerReactiveFunc();
         };
     },
-    res: function (htmlEl, state, id) { },
-    formEl: function (htmlEl, state, id) {
+    res: function (htmlEl, state, id, deps) { },
+    formEl: function (htmlEl, state, id, deps) {
         var elState = state.el;
         var formElState = state.formEl;
         htmlEl.onkeyup = function (ev) {
@@ -37,5 +37,5 @@ var afterRender = {
     el: sets_1.elModelSet,
     res: sets_1.resModelSet,
     formEl: sets_1.formElModelSet,
-}, afterRender);
+}, afterRender, null);
 console.log('Runed!');

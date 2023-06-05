@@ -4,7 +4,7 @@ import { El } from "./el-model";
 export const elWidgetFactory = (
     wClass: string
 ) => ({
-    widget: (m: El, id: string) => `
+    widget: (m: El, id: string, d: unknown) => `
 <li id="${id}" style="font-weight: ${m.isActive ? "bold" : "normal"};">
     ${m.header}<ol></ol>
 </li>`,

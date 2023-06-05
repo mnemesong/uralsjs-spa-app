@@ -8,22 +8,22 @@ import { NumPrefixIdTool, NullDefaultIdTool } from "uralsjs-id-html-tools";
 import { FormEl } from "./form-el-model";
 import { formElWidget } from "./form-el-widget";
 
-export const elModelSet: ModelSet<El, number> = {
+export const elModelSet: ModelSet<El, number, unknown> = {
     widget: elWidgetFactory("els").widget,
     idTool: new NumPrefixIdTool("el_"),
     rootSelector: (el: Rec<El, number>) => 'ol',
-    initData: [
+    initData: () => [
         {header: "el1", isActive: true},
         {header: "el2", isActive: false}
     ],
     stor: new IncrNumReactiveStorage(),
 }
 
-export const  resModelSet: ModelSet<Res, number> = {
+export const  resModelSet: ModelSet<Res, number, unknown> = {
     widget: resWidgetFactory("res").widget,
     idTool: new NumPrefixIdTool("res_"),
     rootSelector: (el: Rec<Res, number>) => '#el_' + el.model.elId + " > ol",
-    initData: [
+    initData: () => [
         { name: "Петров", elId: 0 },
         { name: "Сидоров", elId: 0 },
         { name: "Макарченко", elId: 1 },
@@ -31,11 +31,11 @@ export const  resModelSet: ModelSet<Res, number> = {
     stor: new IncrNumReactiveStorage(),
 }
 
-export const formElModelSet: ModelSet<FormEl, null> = {
+export const formElModelSet: ModelSet<FormEl, null, unknown> = {
     widget: formElWidget,
     idTool: new NullDefaultIdTool('elForm'),
     rootSelector: (el: Rec<FormEl, null>) => '#formContainer',
-    initData: [
+    initData: () => [
         {header: ""}
     ],
     stor: new SoloDefReactiveStorage({header: ''}),

@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.spaApp = void 0;
 var uralsjs_app_abstractions_1 = require("uralsjs-app-abstractions");
 var uralsjs_map_record_1 = require("uralsjs-map-record");
-var browserRendererAndGetSelectors = function (getElements, getRootSelector, elWidget, renderId) {
+var browserRendererAndGetSelectors = function (getElements, getRootSelector, elWidget, renderId, deps) {
     var renderEl = function (el) {
-        return elWidget(el.model, renderId(el.id));
+        return elWidget(el.model, renderId(el.id), deps);
     };
     var grouped = (0, uralsjs_app_abstractions_1.regroup)(getElements(), getRootSelector);
     var groupedWidgets = Object.keys(grouped)
@@ -16,10 +16,10 @@ var browserRendererAndGetSelectors = function (getElements, getRootSelector, elW
     });
     return grouped;
 };
-var spaApp = function (modelSets, afterRender) {
+var spaApp = function (modelSets, afterRender, deps) {
     var state = (0, uralsjs_map_record_1.mapRecordVals)(modelSets, function (el) { return el.stor; });
     Object.keys(state).forEach(function (i) { return state[i].setReactiveFunc(function (recs) {
-        var grouped = browserRendererAndGetSelectors(function () { return recs; }, modelSets[i].rootSelector, modelSets[i].widget, function (id) { return modelSets[i].idTool.renderId(id); });
+        var grouped = browserRendererAndGetSelectors(function () { return recs; }, modelSets[i].rootSelector, modelSets[i].widget, function (id) { return modelSets[i].idTool.renderId(id); }, deps);
         Object.keys(grouped).forEach(function (s) {
             Array.from(document
                 .querySelector(s)
@@ -37,6 +37,6 @@ var spaApp = function (modelSets, afterRender) {
             });
         });
     }); });
-    Object.keys(state).forEach(function (i) { return state[i].reinit(modelSets[i].initData); });
+    Object.keys(state).forEach(function (i) { return state[i].reinit(modelSets[i].initData(deps)); });
 };
 exports.spaApp = spaApp;
