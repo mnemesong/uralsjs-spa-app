@@ -1,6 +1,6 @@
 {
   "name": "uralsjs-spa-app",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "UralsJs Single page application",
   "main": "js/src/index.js",
   "scripts": {
@@ -22,8 +22,7 @@
     "@types/mocha": "^9.*",
     "@types/node": "^13.*",
     "browserify": "^17.0.0",
-    "uglify-js": "^3.17.4",
-    "common-shakeify": "^1.1.2"
+    "uglify-js": "^3.17.4"
   },
   "dependencies": {
     "uralsjs-app-abstractions": "^0.1.*",
