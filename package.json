@@ -1,6 +1,6 @@
 {
   "name": "uralsjs-spa-app",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "UralsJs Single page application",
   "main": "js/src/index.js",
   "scripts": {
@@ -17,9 +17,9 @@
   "author": "Anatoly Starodubtsev <tostar74@mail.ru>",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^10.2.0",
+    "mocha": "^9.*",
     "typescript": "^4.9.4",
-    "@types/mocha": "^10.0.1",
+    "@types/mocha": "^9.*",
     "@types/node": "^18.11.18",
     "browserify": "^17.0.0",
     "uglify-js": "^3.17.4",
